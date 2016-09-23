@@ -28,5 +28,5 @@ TODO: Add long description of the pod here.
   s.public_header_files = 'src/Classes/**/*.h'
 
   s.frameworks = 'UIKit', 'CoreBluetooth', 'CoreLocation'
-  s.dependency 'ReactiveCocoa'
+  s.dependency 'ReactiveCocoa', '~> 2.5'
 end
