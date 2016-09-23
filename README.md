@@ -5,9 +5,9 @@
 [![License](https://img.shields.io/cocoapods/l/FMBle.svg?style=flat)](http://cocoapods.org/pods/FMBle)
 [![Platform](https://img.shields.io/cocoapods/p/FMBle.svg?style=flat)](http://cocoapods.org/pods/FMBle)
 
-## Example
+## Examples
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+To run the examples project, clone the repo, and run `pod install` from the `examples` directory first.
 
 ## Requirements
 
@@ -17,7 +17,7 @@ FMBle is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "FMBle"
+pod "fumble"
 ```
 
 ## Author
