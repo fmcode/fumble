@@ -1,3 +1,7 @@
+//
+// Copyright © 2016 Factory Method. All rights reserved.
+//
+
 #import "NSData+FM.h"
 
 
@@ -34,7 +38,7 @@ static uint8_t const INVALID_NIBBLE = 128;
 {
 	if (!hexString)
 		return nil;
-	
+
 	const NSUInteger charLength = hexString.length;
 	NSUInteger buflen = charLength / 2;
 	if (endian == FMDataEndianCSR)
@@ -45,22 +49,22 @@ static uint8_t const INVALID_NIBBLE = 128;
 	Byte* const bytes = malloc(buflen);
 	memset(bytes, 0, buflen);
 	Byte* p_byte = bytes;
-	
+
 	CFStringInlineBuffer inlineBuffer;
 	CFStringInitInlineBuffer((CFStringRef)hexString, &inlineBuffer, CFRangeMake(0, charLength));
-	
+
 	// Each byte is made up of two hex characters; store the outstanding half-byte until we read the second
 	uint8_t hiNibble = INVALID_NIBBLE;
 	for (CFIndex i = 0; i < charLength; ++i) {
 		unichar c = CFStringGetCharacterFromInlineBuffer(&inlineBuffer, i);
 		uint8_t nextNibble = NIBBLE_FROM_CHAR(c);
-		
+
 		if (nextNibble == INVALID_NIBBLE)
 		{
 			free(bytes);
 			return nil;
 		}
-		
+
 		if (hiNibble == INVALID_NIBBLE)
 		{
 			hiNibble = nextNibble;
@@ -72,14 +76,14 @@ static uint8_t const INVALID_NIBBLE = 128;
 			hiNibble = INVALID_NIBBLE;
 		}
 	}
-	
+
 	if (hiNibble != INVALID_NIBBLE)
 	{
 		// trailing hex character
 		free(bytes);
 		return nil;
 	}
-	
+
 	if (endian == FMDataEndianCSR)
 	{
 		for (CFIndex i=0; i<buflen; i+=2)
@@ -89,7 +93,7 @@ static uint8_t const INVALID_NIBBLE = 128;
 			bytes[i+1] = b;
 		}
 	}
-	
+
 	return [self initWithBytesNoCopy:bytes
 							  length:buflen
 						freeWhenDone:YES];

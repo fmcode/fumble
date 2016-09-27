@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Fumble'
-  s.version          = '0.2.0'
+  s.version          = '0.3.0'
   s.summary          = 'FRP Wrapper for CoreBluetooth'
 
   s.description      = <<-DESC

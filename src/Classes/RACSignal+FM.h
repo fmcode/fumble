@@ -1,11 +1,11 @@
 //
-//  RACSignal+FM.h
-//
-//  Created by Daniel Wang on 6/12/15.
+// Copyright © 2016 Factory Method. All rights reserved.
 //
 
-@import Foundation;
-@import ReactiveCocoa;
+#import <Foundation/Foundation.h>
+#import <ReactiveObjC/ReactiveObjC.h>
+
+
 
 @interface RACSignal (FM)
 

@@ -1,4 +1,4 @@
-		//
+//
 // Copyright © 2016 Factory Method. All rights reserved.
 //
 
@@ -22,10 +22,10 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 	CBCentralManager* central = [[self alloc] initWithDelegate:proxy
 														 queue:queue
 													   options:options];
-	
+
 	objc_setAssociatedObject(central, @selector(fm_delegateProxy), proxy, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	proxy.superDelegate = delegate;
-	
+
 	return central;
 }
 
@@ -33,7 +33,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 {
 	if (self.delegate == self.fm_delegateProxy)
 		return;
-	
+
 	self.fm_delegateProxy.superDelegate = self.delegate;
 	self.delegate = self.fm_delegateProxy;
 }
@@ -46,7 +46,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 		proxy = [[FMCentralManagerDelegateProxy alloc] init];
 		objc_setAssociatedObject(self, _cmd, proxy, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	}
-	
+
 	return proxy;
 }
 
@@ -60,7 +60,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 		case CBCentralManagerStateUnauthorized:	return @"CBCentralManagerStateUnauthorized";
 		case CBCentralManagerStatePoweredOff:	return @"CBCentralManagerStatePoweredOff";
 		case CBCentralManagerStatePoweredOn:	return @"CBCentralManagerStatePoweredOn";
-			
+
 		default:
 			return [NSString stringWithFormat:@"unknown CBCentralManagerState(%zd)", self.state];
 	}
@@ -74,7 +74,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 											 reduceEach:^(CBCentralManager* central) {
 												 return @(central.state);
 											 }]]];
-	
+
 	[self fm_useDelegateProxy];
 	return signal;
 }
@@ -87,7 +87,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 							 RSSI = RSSI && RSSI.intValue < 127 ? RSSI : nil;
 							 return RACTuplePack(peripheral, advertisementData, RSSI);
 						 }];
-	
+
 	[self fm_useDelegateProxy];
 	return signal;
 }
@@ -100,7 +100,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 							  return peripheral;
 						  }]
 						 takeUntil:self.rac_willDeallocSignal];
-	
+
 	[self fm_useDelegateProxy];
 	return signal;
 }
@@ -113,7 +113,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 							  return RACTuplePack(peripheral, error);
 						  }]
 						 takeUntil:self.rac_willDeallocSignal];
-	
+
 	[self fm_useDelegateProxy];
 	return signal;
 }
@@ -125,7 +125,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 						 reduceEach:^(CBCentralManager* central, CBPeripheral* peripheral, NSError* error) {
 							 return RACTuplePack(peripheral, error);
 						 }];
-	
+
 	[self fm_useDelegateProxy];
 	return signal;
 }
@@ -136,7 +136,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 	return [[[self rac_didDiscoverPeripheralSignal]
 			 filter:^BOOL(RACTuple* tuple) {
 				 NSDictionary<NSString *, id>* advertisementData = tuple.second;
-				 
+
 				 NSArray* serviceUUIDs = [advertisementData objectForKey:CBAdvertisementDataServiceUUIDsKey];
 				 if (serviceUUIDs)
 				 {
@@ -165,7 +165,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 				[subscriber sendNext:peripheral];
 				[subscriber sendCompleted];
 				break;
-				
+
 			case CBPeripheralStateDisconnected:
 			case CBPeripheralStateConnecting:
 			{
@@ -207,7 +207,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 					 [self cancelPeripheralConnection:peripheral];
 					 [subscriber sendError:error];
 				 }];
-				
+
 				if (peripheral.state == CBPeripheralStateDisconnected)
 				{
 					[self connectPeripheral:peripheral
@@ -215,7 +215,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 				}
 			}
 				break;
-				
+
 			default:
 				[subscriber sendError:
 				 [NSError errorWithDomain:FMCoreBluetoothErrorDomain
@@ -223,7 +223,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 								 userInfo:@{NSLocalizedDescriptionKey: peripheral.fm_stateName}]];
 				break;
 		}
-		
+
 		// no disposal block needed
 		return nil;
 	}];
@@ -236,10 +236,10 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 		{
 			[subscriber sendNext:peripheral];
 			[subscriber sendCompleted];
-			
+
 			return nil;
 		}
-		
+
 		[[self.rac_didDisconnectPeripheralSignal
 		  filter:^BOOL(RACTuple* tuple) {
 			  RACTupleUnpack(CBPeripheral* p,
@@ -249,7 +249,7 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 		 subscribeNext:^(RACTuple* tuple) {
 			 RACTupleUnpack(CBPeripheral* __unused p,
 							NSError* err) = tuple;
-			 
+
 			 if (!err)
 			 {
 				 [subscriber sendNext:peripheral];
@@ -263,9 +263,9 @@ NSString* const FMCoreBluetoothErrorDomain = @"fm.corp.ios.bluetooth";
 		 error:^(NSError *error) {
 			 [subscriber sendError:error];
 		 }];
-		
+
 		[self cancelPeripheralConnection:peripheral];
-		
+
 		// no disposal block
 		return nil;
 	}];

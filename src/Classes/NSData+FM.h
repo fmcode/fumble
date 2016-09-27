@@ -1,3 +1,7 @@
+//
+// Copyright © 2016 Factory Method. All rights reserved.
+//
+
 #import <Foundation/Foundation.h>
 
 
