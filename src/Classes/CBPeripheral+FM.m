@@ -209,7 +209,7 @@
 {
 	return [[self fm_discoverServices:nil
 						 forceRefresh:YES]
-			flattenMap:^RACStream *(CBPeripheral* peripheral) {
+			flattenMap:^RACSignal *(CBPeripheral* peripheral) {
 				NSMutableArray* signals = [NSMutableArray array];
 				for (CBService* s in peripheral.services)
 				{
